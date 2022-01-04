@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Grid } from 'semantic-ui-react';
 
@@ -13,9 +13,22 @@ class App extends Component {
    return (
       <Router>
         <div className="App">
-          <ContentGrid>
-            <p>New Start...</p>
-          </ContentGrid>
+        {this.props.authUser === null ? (
+            <Route
+              render={() => (
+                <ContentGrid>
+                  <Login />
+                </ContentGrid>
+              )}
+            />
+          ) : (
+            <Fragment>
+              <Nav />
+              <ContentGrid>
+                <Route exact path="/" component={Home} />
+              </ContentGrid>
+            </Fragment>
+          )}
         </div>
       </Router>
     );
@@ -23,15 +36,21 @@ class App extends Component {
 }
 
 const ContentGrid = ({ children }) => (
-  <Grid padded="vertically" columns={1} centered>
+  <Grid columns={1} padded="vertically"  centered>
     <Grid.Row>
-      <Grid.Column style={{ maxWidth: 550 }}>{children}</Grid.Column>
+      <Grid.Column style={{ maxWidth: 485 }}>{children}</Grid.Column>
     </Grid.Row>
   </Grid>
 );
 
+const mapStateToProps = ({ authUser }) => {
+  return {
+    authUser
+  };
+}
+
 const a = connect(
-  null,
+  mapStateToProps,
   { handleInceptiveData }
 )(App);
 
