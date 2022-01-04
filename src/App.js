@@ -1,24 +1,38 @@
-import './App.css';
+import React, { Component } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Grid } from 'semantic-ui-react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { handleInceptiveData } from './actions/shared';
+
+class App extends Component {
+  componentDidMount() {
+    this.props.handleInceptiveData();
+  }
+  render() {
+   return (
+      <Router>
+        <div className="App">
+          <ContentGrid>
+            <p>New Start...</p>
+          </ContentGrid>
+        </div>
+      </Router>
+    );
+  }
 }
 
-export default App;
+const ContentGrid = ({ children }) => (
+  <Grid padded="vertically" columns={1} centered>
+    <Grid.Row>
+      <Grid.Column style={{ maxWidth: 550 }}>{children}</Grid.Column>
+    </Grid.Row>
+  </Grid>
+);
+
+const a = connect(
+  null,
+  { handleInceptiveData }
+)(App);
+
+export default a;
