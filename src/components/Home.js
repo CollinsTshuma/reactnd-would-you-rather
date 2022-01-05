@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Tab } from "semantic-ui-react";
-
-import PropTypes from "prop-types";
 import UserCard from "./UserCard";
+
 export class Home extends Component {
   static propTypes = {
     userQuestionData: PropTypes.object.isRequired,
@@ -21,7 +21,7 @@ const panes = (props) => {
       menuItem: "Unanswered",
       render: () => (
         <Tab.Pane>
-          {userQuestionData.answered.map(question => (
+          {props.userQuestionData.answered.map((question) => (
             <UserCard
               key={question.id}
               question_id={question.id}
@@ -35,7 +35,7 @@ const panes = (props) => {
       menuItem: "Answered",
       render: () => (
         <Tab.Pane>
-          {userQuestionData.unanswered.map(question => (
+          {props.userQuestionData.unanswered.map((question) => (
             <UserCard
               key={question.id}
               question_id={question.id}
@@ -48,14 +48,17 @@ const panes = (props) => {
   ];
 };
 
-const mapStateToProps = ({ authUser, questions, users }) => {
-  const answeredIds = Object.keys(users[authUser].answers);
+const mapStateToProps = ({ authUser, questions, users  }) => {
   const answered = Object.values(questions)
-    .filter(question => answeredIds.includes(question.id))
-    .sort((a, b) => b.timestamp - a.timestamp);
+    .filter(
+      (question) => !Object.keys(users[authUser].answers).includes(question.id)
+    )
+    .sort((x, y) => y.timestamp - x.timestamp);
   const unanswered = Object.values(questions)
-    .filter(question => !answeredIds.includes(question.id))
-    .sort((a, b) => b.timestamp - a.timestamp);
+    .filter((question) =>
+      Object.keys(users[authUser].answers).includes(question.id)
+    )
+    .sort((x, y) => y.timestamp - x.timestamp);
 
   return { userQuestionData: { answered, unanswered } };
 };
