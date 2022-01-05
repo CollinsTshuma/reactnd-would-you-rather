@@ -5,22 +5,19 @@
 
 Would You Rather is a fully responsive and mobile-ready polling game that presents the user with a series of questions.
 
-![screenshot #1](docs/assets/images/wyr77-small.jpg)
+![Screenshot (285)](https://user-images.githubusercontent.com/62089415/148186198-287799b1-e1bf-431b-9feb-6e7ddb551708.png)
 
 It's built with React, Redux, React Router, & Redux Thunk.
 
-This app is the second of three projects required for [Udacity's React Nanodegree program](https://www.udacity.com/course/react-nanodegree--nd019).
-
-- **Live Demo:** [https://reactnd-would-you-rather.netlify.com](https://reactnd-would-you-rather.netlify.com/)
-- **Code Notes:** [Step-by-step walk-though of how this project was built](https://james-priest.github.io/reactnd-project-would-you-rather/)
+This app is the second project required for [Udacity's React Nanodegree program](https://www.udacity.com/course/react-nanodegree--nd019).
 
 ## Installation
 
 Clone the repository, change directories, and use NPM to install the dependencies.
 
 ```bash
-$ git clone https://github.com/james-priest/reactnd-project-would-you-rather.git
-$ cd reactnd-project-would-you-rather
+$ git clone https://github.com/CollinsTshuma/reactnd-would-you-rather.git
+$ cd reactnd-would-you-rather
 $ npm install
 ```
 
@@ -36,4 +33,4 @@ The project can be viewed in the browser at
 
 ## Screenshots
 
-![screenshot #2](docs/assets/images/wyr76-small.jpg)
+![![Screenshot (284)](https://user-images.githubusercontent.com/62089415/148186305-da4cfaf6-1ac7-4c8c-b8bc-0c038aa09c18.png)
