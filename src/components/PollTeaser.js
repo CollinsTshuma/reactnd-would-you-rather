@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { Button, Header } from "semantic-ui-react";
 
 import PropTypes from "prop-types";
-
+import { colors } from '../utils/helpers';
 export default class PollTeaser extends Component {
   state = {
     viewPoll: false,
@@ -12,7 +12,6 @@ export default class PollTeaser extends Component {
   static propTypes = {
     question: PropTypes.object.isRequired,
     unanswered: PropTypes.bool.isRequired,
-    color: PropTypes.string
   };
 
   manipulateClick = (error) => {
@@ -21,27 +20,32 @@ export default class PollTeaser extends Component {
     }));
   };
   render() {
-    const { question, unanswered, color } = this.props;
+  const contentOfButton =
+    this.props.unanswered === true ? "Answer Poll" : "Results";
+  const colorOfButton =
+    this.props.unanswered === true ? colors.green : colors.blue;
 
-    if (this.state.viewPoll === true) {
-      return <Redirect push to={`/questions/${question.id}`} />;
-    }
+  switch (this.state.viewPoll) {
+    case true:
+      return <Redirect push to={`/questions/${this.props.question.id}`} />;
+    default:
+  }
     return (
       <Fragment>
-        <Header as="h5" textAlign="left">
+        <Header  textAlign="left" as="h5">
           Would you rather
         </Header>
         <p style={{ textAlign: 'center' }}>
-          {question.optionOne.text}
+          {this.props.question.optionOne.text}
           <br />
           or...
         </p>
         <Button
-          color={color}
-          size="tiny"
-          fluid
-          onClick={this.handleClick}
-          content={unanswered === true ? 'Answer Poll' : 'Results'}
+           content={contentOfButton}
+           color={colorOfButton.name}
+           fluid
+           onClick={this.manipulateClick}
+           size="tiny"
         />
       </Fragment>
     );

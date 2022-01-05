@@ -4,13 +4,40 @@ import { Grid, Image, Header, Segment } from "semantic-ui-react";
 
 import PropTypes from "prop-types";
 
+import { colors } from "../utils/helpers";
+import PollTeaser from "./PollTeaser";
+import PollQuestion from "./PollQuestion";
+import PollResult from "./PollResult";
+
+const pollTypes = {
+    POLL_QUESTION: "POLL_QUESTION",
+    POLL_TEASER: "POLL_TEASER",
+    POLL_RESULT: "POLL_RESULT",
+  };
+  
+function PollContent(props) {
+    if (props.pollType === pollTypes.POLL_TEASER) {
+      return (
+        <PollTeaser question={props.question} unanswered={props.unanswered} />
+      );
+    } else if (props.pollType === pollTypes.POLL_QUESTION) {
+      return <PollQuestion question={props.question} />;
+    } else if (props.pollType === pollTypes.POLL_RESULT) {
+      return <PollResult question={props.question} />;
+    } else {
+      return;
+    }
+  }
 export class UserCard extends Component {
   static propTypes = {
-    userId: PropTypes.string.isRequired,
-    color: PropTypes.string
+    question: PropTypes.object.isRequired,
+    author: PropTypes.object.isRequired,
+    pollType: PropTypes.string.isRequired,
+    unanswered: PropTypes.bool,
+    question_id: PropTypes.string
   };
   render() {
-    const { user, children, color } = this.props;
+    const { author, question, pollType, unanswered = null } = this.props;
 
     const tabColor = unanswered === true ? colors.green : colors.blue;
     const borderTop =
@@ -24,18 +51,18 @@ export class UserCard extends Component {
           as="h5"
           attached="top"
           block
-          style={{ borderTop: `2px solid ${color}` }}
+          style={{ borderTop: borderTop  }}
           textAlign="left"
         >
-          content={`${user.name} asks:`}
+          {author.name} asks:
         </Header>
 
         <Grid divided padded>
           <Grid.Row>
-            <Grid.Column width={5}>
-              <Image src={user.avatarURL} />
+            <Grid.Column width={4}>
+              <Image src={author.avatarURL} />
             </Grid.Column>
-            <Grid.Column width={11}>{children}</Grid.Column>
+            <Grid.Column width={10}>{children}</Grid.Column>
           </Grid.Row>
         </Grid>
       </Segment.Group>
@@ -43,11 +70,30 @@ export class UserCard extends Component {
   }
 }
 
-function mapStateToProps({ users }, props) {
-    const user = users[props.userId];
+function mapStateToProps(
+    { users, questions, authUser },
+    { match, question_id }
+  ) {
+    let question, pollType;
+    if (question_id !== undefined) {
+      question = questions[question_id];
+      pollType = pollTypes.POLL_TEASER;
+    } else {
+      const { question_id } = match.params;
+      question = questions[question_id];
+      const user = users[authUser];
+  
+      pollType = pollTypes.POLL_QUESTION;
+      if (Object.keys(user.answers).includes(question.id)) {
+        pollType = pollTypes.POLL_RESULT;
+      }
+    }
+    const author = users[question.author];
   
     return {
-      user
+      question,
+      author,
+      pollType
     };
   }
 
